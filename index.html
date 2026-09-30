@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHMAD CHEW - Community Health Examination Preparation</title>
+    <style>
+        :root {
+            --primary: #008751;
+            --primary-dark: #005c37;
+            --secondary: #ffffff;
+            --accent: #2e7d32;
+            --bg: #f4f7f6;
+            --text: #222222;
+            --card-bg: #ffffff;
+            --danger: #d32f2f;
+            --warning: #f57c00;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding-bottom: 60px;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: var(--primary-dark);
+            padding: 10px 0;
+            overflow-x: auto;
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            border-radius: 4px;
+        }
+
+        nav button.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-bottom: 2px solid white;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+            text-decoration: none;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: #666;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--danger);
+            text-align: right;
+            margin-bottom: 15px;
+        }
+
+        .options-list {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #f9f9f9;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .option-btn.selected {
+            background-color: #e0f2fe;
+            border-color: #0284c7;
+            font-weight: bold;
+        }
+
+        .cbt-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .explanation {
+            background-color: #eef2ff;
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: #666;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>AHMAD CHEW</h1>
+        <p>Community Health Examination Preparation</p>
+    </header>
+
+    <nav>
+        <button onclick="showView('home')" id="nav-home" class="active">Home</button>
+        <button onclick="showView('courses')" id="nav-courses">Courses</button>
+        <button onclick="showView('mock')" id="nav-mock">National Exam Mock</button>
+        <button onclick="showView('progress')" id="nav-progress">Progress</button>
+        <button onclick="showView('about')" id="nav-about">About</button>
+    </nav>
+
+    <div class="container">
+
+        <input type="text" class="search-box" id="globalSearch" placeholder="Search courses, topics, or questions..." onkeyup="handleSearch()">
+
+        <div id="view-home" class="view active">
+            <div class="card">
+                <h2>Welcome to AHMAD CHEW!</h2>
+                <p style="margin-top: 8px; font-size: 0.95rem; color: #444;">
+                    Your standard online prep platform for Nigerian Community Health Extension Worker (CHEW) professional and national examinations.
+                </p>
+                <button class="btn" onclick="startMockExam()">Start Mock CBT Examination</button>
+            </div>
+
+            <h3 style="margin-bottom: 10px;">Select Curriculum Level</h3>
+            <div class="grid">
+                <div class="card">
+                    <span class="badge">100 Level</span>
+                    <h3>Foundational Courses</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin: 8px 0;">Anatomy, PHC Intro, Professional Ethics, Communication & more.</p>
+                    <button class="btn" onclick="filterCoursesByLevel('100')">Explore 100L</button>
+                </div>
+                <div class="card">
+                    <span class="badge">200 Level</span>
+                    <h3>Intermediate Courses</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin: 8px 0;">Maternal Health, Reproductive Health, Child Health, Standing Orders & more.</p>
+                    <button class="btn" onclick="filterCoursesByLevel('200')">Explore 200L</button>
+                </div>
+                <div class="card">
+                    <span class="badge">300 Level</span>
+                    <h3>Advanced Courses</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin: 8px 0;">Health Statistics, PHC Management, HMIS, Research Methodology & more.</p>
+                    <button class="btn" onclick="filterCoursesByLevel('300')">Explore 300L</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-courses" class="view">
+            <h2>CHEW Curriculum Courses</h2>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">Select a course to study notes or attempt course-specific CBT questions.</p>
+            <div id="coursesList" class="grid"></div>
+        </div>
+
+        <div id="view-study" class="view">
+            <button class="btn btn-secondary" onclick="showView('courses')" style="width: auto; margin-bottom: 15px;">← Back to Courses</button>
+            <div class="card" id="studyContent"></div>
+        </div>
+
+        <div id="view-mock" class="view">
+            <div class="card">
+                <h2>National Examination Practice (Mock CBT)</h2>
+                <p style="margin: 10px 0; font-size: 0.9rem; color: #555;">
+                    This practice exam randomly draws questions across all CHEW subjects (100L - 300L) following the National Standing Orders and curriculum standards.
+                </p>
+                <ul>
+                    <li>Randomized questions & options</li>
+                    <li>Countdown timer enabled</li>
+                    <li>Automatic scoring and weak-topic analysis</li>
+                </ul>
+                <button class="btn" style="margin-top: 15px;" onclick="startMockExam()">Begin Practice Exam</button>
+            </div>
+        </div>
+
+        <div id="view-cbt" class="view">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="badge" id="cbtCourseBadge">Course CBT</span>
+                    <div class="timer" id="timer">Time Left: --:--</div>
+                </div>
+
+                <h3 id="cbtQuestionTracker" style="margin: 10px 0; font-size: 1rem; color: #555;">Question 1 of 10</h3>
+                <h3 id="cbtQuestionText" style="margin-bottom: 15px;">Question text will appear here...</h3>
+
+                <div class="options-list" id="cbtOptions"></div>
+
+                <div class="cbt-nav">
+                    <button class="btn btn-secondary" onclick="prevQuestion()">Previous</button>
+                    <button class="btn btn-secondary" onclick="nextQuestion()">Next</button>
+                </div>
+                <button class="btn btn-danger" style="margin-top: 15px;" onclick="submitExam()">Submit Examination</button>
+            </div>
+        </div>
+
+        <div id="view-results" class="view">
+            <div class="card">
+                <h2>Examination Results</h2>
+                <div class="grid" style="margin: 20px 0;">
+                    <div class="stat-card">
+                        <div>Score</div>
+                        <div class="stat-number" id="resScore">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>Correct</div>
+                        <div class="stat-number" id="resCorrect" style="color: #10b981;">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>Wrong</div>
+                        <div class="stat-number" id="resWrong" style="color: #ef4444;">0</div>
+                    </div>
+                </div>
+                <button class="btn" onclick="showView('home')">Return to Home</button>
+            </div>
+            <div class="card">
+                <h3>Detailed Answers Review</h3>
+                <div id="reviewContainer" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+
+        <div id="view-progress" class="view">
+            <h2>Your Dashboard & Progress</h2>
+            <div class="grid" style="margin-top: 15px;">
+                <div class="stat-card">
+                    <div>Exams Attempted</div>
+                    <div class="stat-number" id="dashAttempted">0</div>
+                </div>
+                <div class="stat-card">
+                    <div>Average Score</div>
+                    <div class="stat-number" id="dashAvg">0%</div>
+                </div>
+            </div>
+            <div class="card" style="margin-top: 20px;">
+                <h3>Study Tips for Success</h3>
+                <ul style="margin-left: 20px; margin-top: 10px; font-size: 0.9rem; color: #444;">
+                    <li>Master the National Standing Orders for common clinical presentations.</li>
+                    <li>Pay special attention to Cold Chain storage temperatures in Immunization.</li>
+                    <li>Review Maternal and Child Health referral triggers regularly.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="view-about" class="view">
+            <div class="card">
+                <h2>About AHMAD CHEW</h2>
+                <p style="margin-top: 10px; font-size: 0.95rem; line-height: 1.5; color: #444;">
+                    <strong>AHMAD CHEW</strong> is a dedicated web-based examination prep platform designed specifically for Community Health Extension Worker (CHEW) students across Nigeria.
+                </p>
+                <p style="margin-top: 10px; font-size: 0.95rem; line-height: 1.5; color: #444;">
+                    The question bank and study materials are constructed in alignment with the Nigerian CHEW curriculum, Community Health principles, and standard Primary Health Care Standing Orders.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; AHMAD CHEW - Community Health Examination Preparation
+    </footer>
+
+    <script>
+        const coursesData = [
+            { id: "c101", level: "100", name: "Anatomy & Physiology", overview: "Basic structure and functions of the human body systems." },
+            { id: "c102", level: "100", name: "Introduction to Primary Health Care", overview: "Principles of PHC, Alma-Ata Declaration, and Nigerian PHC system." },
+            { id: "c103", level: "100", name: "Professional Ethics", overview: "Code of conduct, patient rights, and professional responsibilities." },
+            { id: "c104", level: "100", name: "Immunity & Immunization", overview: "Cold chain management, EPI schedule, and vaccine preventable diseases." },
+            { id: "c105", level: "100", name: "Control of Communicable Diseases", overview: "Transmission, prevention, and control of infectious diseases in communities." },
+            { id: "c201", level: "200", name: "Maternal Health", overview: "Antenatal care, labor monitoring, postnatal care, and emergency obstetric care." },
+            { id: "c202", level: "200", name: "Child Health", overview: "IMCI guidelines, growth monitoring, malnutrition management, and childhood illness." },
+            { id: "c203", level: "200", name: "Use of National Standing Orders", overview: "Clinical protocols and management flows for CHEWs in Primary Health Centers." },
+            { id: "c204", level: "200", name: "Reproductive Health & Family Planning", overview: "Contraceptive methods, counseling, and reproductive wellness." },
+            { id: "c301", level: "300", name: "Health Statistics & HMIS", overview: "Data collection, tally sheets, monthly summary forms, and health indicators." },
+            { id: "c302", level: "300", name: "Primary Health Care Management", overview: "Leadership, clinic administration, and resource allocation in health posts." },
+            { id: "c303", level: "300", name: "Referral System & Outreach Services", overview: "Two-way referral linkage, mobile clinic organization, and community mobilizations." }
+        ];
+
+        const questionBank = [
+            {
+                courseId: "c104",
+                question: "What is the recommended storage temperature range for vaccines stored at the health facility level in the cold chain system?",
+                options: ["-10°C to -20°C", "+2°C to +8°C", "+10°C to +15°C", "0°C to -5°C"],
+                answer: 1,
+                explanation: "Vaccines at the health facility/primary health center level must be kept in cold chain refrigerators between +2°C and +8°C to maintain potency.",
+                importantPoint: "OPV and Measles vaccines are heat sensitive, while Tetanus Toxoid / Pentavalent vaccines are freeze sensitive."
+            },
+            {
+                courseId: "c203",
+                question: "According to the National Standing Orders, what is the immediate step for a CHEW when managing a child presenting with severe dehydration?",
+                options: ["Administer oral paracetamol and discharge", "Initiate immediate fluid resuscitation/ORS and arrange urgent referral", "Give cough syrup", "Wait for lab results before action"],
+                answer: 1,
+                explanation: "Severe dehydration requires immediate rehydration therapy (ORS or IV fluids if trained/available) while arranging urgent referral to a higher facility.",
+                importantPoint: "Always assess signs of severe dehydration: lethargy, sunken eyes, skin pinch goes back very slowly (>2 seconds)."
+            },
+            {
+                courseId: "c102",
+                question: "Which international conference established Primary Health Care (PHC) as the key strategy for achieving Health for All?",
+                options: ["Geneva Conference 1990", "Alma-Ata Declaration 1978", "Abuja Declaration 2001", "New York Summit 2015"],
+                answer: 1,
+                explanation: "The Alma-Ata Declaration of 1978 defined Primary Health Care as essential health care made universally accessible to individuals and families in the community.",
+                importantPoint: "PHC forms the backbone of the Nigerian health care delivery system."
+            },
+            {
+                courseId: "c201",
+                question: "In Antenatal Care (ANC), what is the minimum number of recommended contacts according to current WHO / National guidelines?",
+                options: ["2 contacts", "4 contacts", "8 contacts", "12 contacts"],
+                answer: 2,
+                explanation: "WHO guidelines recommend at least 8 contacts during pregnancy to reduce perinatal mortality and improve maternal health outcomes.",
+                importantPoint: "Early ANC booking in the first trimester is crucial for risk assessment."
+            },
+            {
+                courseId: "c301",
+                question: "What is the primary tool used by CHEWs in a PHC facility to record daily patient consultations before transferring data to monthly summary sheets?",
+                options: ["HMIS Form 001 / OPD Register", "Inventory Log", "Tally Register", "Financial Ledger"],
+                answer: 0,
+                explanation: "The Outpatient Department (OPD) Register / Form 001 is used daily to capture patient demographic and clinical presentation data.",
+                importantPoint: "Accurate daily recording ensures reliable monthly HMIS statistics."
+            }
+        ];
+
+        let currentCBTQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let timerInterval;
+        let timeRemaining = 0;
+
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+
+            const targetView = document.getElementById('view-' + viewId);
+            if (targetView) targetView.classList.add('active');
+
+            const targetNav = document.getElementById('nav-' + viewId);
+            if (targetNav) targetNav.classList.add('active');
+
+            if (viewId === 'courses') renderCourses(coursesData);
+            if (viewId === 'progress') renderProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function renderCourses(list) {
+            const container = document.getElementById('coursesList');
+            container.innerHTML = '';
+            list.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <span class="badge">${c.level} Level</span>
+                    <h3>${c.name}</h3>
+                    <p style="font-size: 0.85rem; color: #555; margin: 8px 0;">${c.overview}</p>
+                    <button class="btn" onclick="openStudyMode('${c.id}')">Study Notes</button>
+                    <button class="btn btn-secondary" onclick="startCourseCBT('${c.id}')">Take CBT Quiz</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterCoursesByLevel(level) {
+            showView('courses');
+            const filtered = coursesData.filter(c => c.level === level);
+            renderCourses(filtered);
+        }
+
+        function openStudyMode(courseId) {
+            const course = coursesData.find(c => c.id === courseId);
+            const contentDiv = document.getElementById('studyContent');
+            
+            contentDiv.innerHTML = `
+                <span class="badge">${course.level} Level</span>
+                <h2>${course.name} - Study Guide</h2>
+                <div style="margin-top: 15px; font-size: 0.95rem; line-height: 1.6;">
+                    <h4>Key Objectives & Overview</h4>
+                    <p>${course.overview}</p>
+                    <h4 style="margin-top: 15px;">Core CHEW Responsibilities</h4>
+                    <ul>
+                        <li>Early identification and community triage of cases.</li>
+                        <li>Standard treatment using National Standing Orders.</li>
+                        <li>Timely emergency stabilization and referral to General Hospitals.</li>
+                    </ul>
+                </div>
+                <button class="btn" style="margin-top: 20px;" onclick="startCourseCBT('${course.id}')">Practice Questions for this Course</button>
+            `;
+            showView('study');
+        }
+
+        function startCourseCBT(courseId) {
+            let questions = questionBank.filter(q => q.courseId === courseId);
+            if (questions.length === 0) questions = [...questionBank];
+            setupCBT(questions, "Course Quiz");
+        }
+
+        function startMockExam() {
+            setupCBT([...questionBank], "National Mock Exam");
+        }
+
+        function setupCBT(questions, label) {
+            currentCBTQuestions = questions;
+            currentQuestionIndex = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            document.getElementById('cbtCourseBadge').innerText = label;
+
+            showView('cbt');
+            startTimer(questions.length * 60);
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = currentCBTQuestions[currentQuestionIndex];
+            document.getElementById('cbtQuestionTracker').innerText = `Question ${currentQuestionIndex + 1} of ${currentCBTQuestions.length}`;
+            document.getElementById('cbtQuestionText').innerText = q.question;
+
+            const optionsContainer = document.getElementById('cbtOptions');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn' + (userAnswers[currentQuestionIndex] === idx ? ' selected' : '');
+                btn.innerText = `${String.fromCharCode(65 + idx)}. ${opt}`;
+                btn.onclick = () => selectOption(idx);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(index) {
+            userAnswers[currentQuestionIndex] = index;
+            loadQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentCBTQuestions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function startTimer(seconds) {
+            clearInterval(timerInterval);
+            timeRemaining = seconds;
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time is up! Submitting your examination automatically.");
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timeRemaining / 60);
+            const secs = timeRemaining % 60;
+            document.getElementById('timer').innerText = `Time Left: ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function submitExam() {
+            clearInterval(timerInterval);
+            let score = 0;
+
+            const reviewContainer = document.getElementById('reviewContainer');
+            reviewContainer.innerHTML = '';
+
+            currentCBTQuestions.forEach((q, idx) => {
+                const userAns = userAnswers[idx];
+                const isCorrect = userAns === q.answer;
+                if (isCorrect) score++;
+
+                const item = document.createElement('div');
+                item.style.marginBottom = "15px";
+                item.style.padding = "10px";
+                item.style.borderBottom = "1px solid #ddd";
+
+                item.innerHTML = `
+                    <p><strong>Q${idx + 1}: ${q.question}</strong></p>
+                    <p style="font-size: 0.9rem; margin-top: 5px;">Your Answer: <span style="color:${isCorrect ? 'green' : 'red'}; font-weight:bold;">${userAns !== null ? q.options[userAns] : 'Not Answered'}</span></p>
+                    <p style="font-size: 0.9rem;">Correct Answer: <strong>${q.options[q.answer]}</strong></p>
+                    <div class="explanation">
+                        <strong>Explanation:</strong> ${q.explanation}<br>
+                        <em><strong>Key Point:</strong> ${q.importantPoint}</em>
+                    </div>
+                `;
+                reviewContainer.appendChild(item);
+            });
+
+            const percentage = Math.round((score / currentCBTQuestions.length) * 100);
+            document.getElementById('resScore').innerText = `${percentage}%`;
+            document.getElementById('resCorrect').innerText = score;
+            document.getElementById('resWrong').innerText = currentCBTQuestions.length - score;
+
+            saveProgress(percentage);
+            showView('results');
+        }
+
+        function saveProgress(score) {
+            let history = JSON.parse(localStorage.getItem('ahmad_chew_history') || '[]');
+            history.push(score);
+            localStorage.setItem('ahmad_chew_history', JSON.stringify(history));
+        }
+
+        function renderProgress() {
+            let history = JSON.parse(localStorage.getItem('ahmad_chew_history') || '[]');
+            document.getElementById('dashAttempted').innerText = history.length;
+            if (history.length > 0) {
+                const avg = Math.round(history.reduce((a, b) => a + b, 0) / history.length);
+                document.getElementById('dashAvg').innerText = `${avg}%`;
+            } else {
+                document.getElementById('dashAvg').innerText = `0%`;
+            }
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('globalSearch').value.toLowerCase();
+            if (!query) return;
+
+            const filteredCourses = coursesData.filter(c => 
+                c.name.toLowerCase().includes(query) || c.overview.toLowerCase().includes(query)
+            );
+
+            showView('courses');
+            renderCourses(filteredCourses);
+        }
+    </script>
+</body>
+</html>
